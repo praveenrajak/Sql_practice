@@ -44,6 +44,23 @@ payment| sold| month    |
 
 
 
+----------------------------------------------
+Solution
+----------------------------------------------
+
+
+select sum(payments) as payments,sum(ss) as sold,month1 as month 
+from parent a 
+left join ( select parent_ref,sum(sold)  as ss from child group by parent_ref)b
+ on a.parent_id=b.parent_ref
+ group by month1;
+ 
+ 
+ 
+ ***************************************************END*********************************************************************
+
+
+
 
 
 
