@@ -41,6 +41,28 @@ customer_id,plan_month,plan_value
   5        ,2020-06-10,   499
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                      Problem Statement ENDS
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+Solution:
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+There are many ways to solve problem one solution given below.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+select a.customer_id,
+max(case when a.plan_value < b.plan_value then 'yes' else 'no' end) as upgrade ,
+max(case when a.plan_value > b.plan_value then 'yes' else 'no' end) as downgrade 
+from 
+(select *,row_number() over(partition by customer_id order by plan_month) as rnk from dataplan)a
+inner join 
+(select *,row_number() over(partition by customer_id order by plan_month) as rnk1 from dataplan)b
+on a.rnk=b.rnk1-1 
+where a.customer_id=b.customer_id
+group by a.customer_id
+order by a.customer_id,b.customer_id;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ENJOY SQL TIME!!
-
